@@ -2,6 +2,7 @@ import time
 import piglow
 import pihole as ph
 
+
 # Brightness Settings for Each Color
 WHITE = 16
 BLUE = 64
@@ -119,9 +120,9 @@ def flash_all():
     flash_yellow()
     flash_green()
     flash_blue()
+    flash_white()
     
     
-
 # MAIN
 # Create an object
 pihole = ph.PiHole("10.0.0.2")
@@ -137,6 +138,7 @@ else:
 str_ads = pihole.blocked
 ads = int(str_ads.replace(',', ''))
 
+pihole.refresh()
 system_cycles = 0;
 while enabled:
     
@@ -147,6 +149,8 @@ while enabled:
     
     if system_cycles % 12 == 0: # ~2 minutes
         flash_white()
+        flash_white()
+        
         percent = float(pihole.ads_percentage)  # Example: 31.2
         x = 0.0
         while x < percent:
@@ -160,7 +164,6 @@ while enabled:
                 x += 1.0
                 flash_yellow() # 1%
                 
-               
     refresh = get_ads() # Get the current number of ads blocked
     
     if refresh > ads:
