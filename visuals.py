@@ -2,12 +2,14 @@ import time
 import piglow
 import pihole as ph
 
-
-GREEN = 64
-RED = 128
+# Brightness Settings for Each Color
+WHITE = 16
 BLUE = 64
+GREEN = 64
 YELLOW = 128
 ORANGE = 128
+RED = 128
+
 
 def check_status():
     if pihole.status == 'enabled':
@@ -16,13 +18,29 @@ def check_status():
         s = False
     return s
 
+
 def get_ads():
     num = int(pihole.blocked.replace(',', ''))
     return num
 
 
+def flash_white():
+    
+    # Turn off all, turn on blue
+    piglow.clear()
+    piglow.white(WHITE)
+    piglow.show()
+    # Leave on for 0.1 seconds
+    time.sleep(0.2)
+    
+    # Leave off for 0.1 seconds
+    piglow.clear()
+    piglow.show()
+    time.sleep(0.2)
+
 def flash_blue():
-    # Turn off all, turn on red
+    
+    # Turn off all, turn on blue
     piglow.clear()
     piglow.blue(BLUE)
     piglow.show()
@@ -36,6 +54,7 @@ def flash_blue():
 
 
 def flash_green():
+    
     # Turn off all, turn on green
     piglow.clear()
     piglow.green(GREEN)
@@ -66,7 +85,7 @@ def flash_yellow():
     
 def flash_orange():
     
-    # Turn off all, turn on red
+    # Turn off all, turn on orange
     piglow.clear()
     piglow.orange(ORANGE)
     piglow.show()
@@ -94,11 +113,12 @@ def flash_red():
     time.sleep(0.1)
     
     
-def flash_all(): # Flashes all but blue
+def flash_all():
     flash_red()
     flash_orange()
     flash_yellow()
     flash_green()
+    flash_blue()
     
     
 
@@ -109,7 +129,7 @@ status = pihole.status
 print("PiHole-PiGlow is " + status)
 
 if status == 'enabled':
-    enabled = True  
+    enabled = True
 else:
     enabled = False
     
@@ -126,8 +146,7 @@ while enabled:
     time.sleep(0.5)
     
     if system_cycles % 12 == 0: # ~2 minutes
-        
-        flash_all() # Signal Percentage Display
+        flash_white()
         percent = float(pihole.ads_percentage)  # Example: 31.2
         x = 0.0
         while x < percent:
