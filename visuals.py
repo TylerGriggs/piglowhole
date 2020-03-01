@@ -4,13 +4,15 @@ import pihole as ph
 
 
 # Brightness Settings for Each Color
-WHITE = 16
+WHITE = 32
 BLUE = 64
 GREEN = 64
 YELLOW = 128
 ORANGE = 128
 RED = 128
 
+# System Wait Seconds per refresh loop
+SYS_WAIT = 10
 
 def check_status():
     if pihole.status == 'enabled':
@@ -172,11 +174,11 @@ while enabled:
         while refresh > ads: # The refreshed number of ads is larger than tracked
             flash_red()     # Function Call, flash_red LED
             ads += 1        # Increment tracked ads
-        flash_blue()
-        flash_blue()
+        flash_orange()
+        flash_yellow()
     
-    # Idle for 10 seconds to reduce refresh rate
-    time.sleep(10)
+    # Idle for a number of seconds to reduce refresh rate
+    time.sleep(SYS_WAIT)
     system_cycles+=1
     
     pihole.refresh()
