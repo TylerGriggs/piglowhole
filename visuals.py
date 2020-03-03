@@ -4,7 +4,7 @@ import pihole as ph
 
 
 # Brightness Settings for Each Color
-WHITE = 32
+WHITE = 48
 BLUE = 64
 GREEN = 64
 YELLOW = 128
@@ -107,6 +107,7 @@ def flash_red():
     piglow.clear()
     piglow.red(RED)
     piglow.show()
+    
     # Leave on for 0.1 seconds
     time.sleep(0.1)
     
@@ -174,8 +175,7 @@ while enabled:
         while refresh > ads: # The refreshed number of ads is larger than tracked
             flash_red()     # Function Call, flash_red LED
             ads += 1        # Increment tracked ads
-        flash_orange()
-        flash_yellow()
+        flash_green()
     
     # Idle for a number of seconds to reduce refresh rate
     time.sleep(SYS_WAIT)
