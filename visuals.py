@@ -23,6 +23,7 @@ def check_status():
 
 
 def get_ads():
+    pihole.refresh()
     num = int(pihole.blocked.replace(',', ''))
     return num
 
@@ -134,14 +135,13 @@ print("PiHole-PiGlow is " + status)
 
 if status == 'enabled':
     enabled = True
+    flash_all()
 else:
     enabled = False
     
 # Set the current ad count on startup
-str_ads = pihole.blocked
-ads = int(str_ads.replace(',', ''))
+ads = get_ads()
 
-pihole.refresh()
 system_cycles = 0;
 while enabled:
     
@@ -153,6 +153,10 @@ while enabled:
     if system_cycles % 12 == 0: # ~2 minutes
         flash_white()
         flash_white()
+        pihole = ph.PiHole("10.0.0.2")
+        pihole.refresh()
+        flash_green()
+        time.sleep(0.5)
         
         percent = float(pihole.ads_percentage)  # Example: 31.2
         x = 0.0
@@ -166,7 +170,7 @@ while enabled:
             else:
                 x += 1.0
                 flash_yellow() # 1%
-                
+        
     refresh = get_ads() # Get the current number of ads blocked
     
     if refresh > ads:
@@ -175,13 +179,10 @@ while enabled:
         while refresh > ads: # The refreshed number of ads is larger than tracked
             flash_red()     # Function Call, flash_red LED
             ads += 1        # Increment tracked ads
-        flash_green()
     
     # Idle for a number of seconds to reduce refresh rate
     time.sleep(SYS_WAIT)
-    system_cycles+=1
-    
-    pihole.refresh()
+    system_cycles += 1
     enabled = check_status()
 
 #When disabled show solid red
